@@ -1,34 +1,34 @@
 import pandas as pd
 
-# 1. Teeno files ke naam
+# 1. Define the names of the input files
 files = [
     'data/daily_sales_data_0.csv',
     'data/daily_sales_data_1.csv',
     'data/daily_sales_data_2.csv'
 ]
 
-# 2. Saari files ko read kar ke ek list mein jama karein
+# 2. Read each file and append it to a list
 data_frames = []
 for file in files:
     df = pd.read_csv(file)
     data_frames.append(df)
 
-# 3. Saara data combine (merge) karein
+# 3. Concatenate all dataframes into one
 combined_df = pd.concat(data_frames)
 
-# 4. Sirf "pink morsel" wala data filter karein
+# 4. Filter data to include only "pink morsel" products
 combined_df = combined_df[combined_df['product'] == 'pink morsel']
 
-# 5. Price column se '$' sign khatam karein aur number mein badlein
+# 5. Clean the price column by removing '$' and converting to float
 combined_df['price'] = combined_df['price'].str.replace('$', '', regex=False).astype(float)
 
-# 6. Sales column banayein (quantity * price)
+# 6. Create a new 'sales' column (quantity * price)
 combined_df['sales'] = combined_df['quantity'] * combined_df['price']
 
-# 7. Sirf zaroori columns rakhein: sales, date, region
+# 7. Keep only the necessary columns: sales, date, and region
 final_df = combined_df[['sales', 'date', 'region']]
 
-# 8. Result ko nayi file mein save karein
+# 8. Save the processed data to a new CSV file
 final_df.to_csv('formatted_data.csv', index=False)
 
-print("Kaam ho gaya! 'formatted_data.csv' taiyar hai.")
+print("Data processing complete! 'formatted_data.csv' has been generated successfully.")
